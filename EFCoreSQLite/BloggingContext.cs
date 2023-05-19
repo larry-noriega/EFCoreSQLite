@@ -2,6 +2,7 @@
 
 using EFCoreSQLite.Entities;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace EFCoreSQLite
 {
@@ -10,16 +11,7 @@ namespace EFCoreSQLite
 		public DbSet<Blog> Blogs { get; set; }
 		public DbSet<Post> Posts { get; set; }
 
-		public string? DbPath { get; }
-
-        public BloggingContext()
-        {
-			var folder = Environment.SpecialFolder.LocalApplicationData;
-			var path = Environment.GetFolderPath(folder);
-			DbPath = Path.Join(path, "blogginh.db");
-        }
-
 		protected override void OnConfiguring(DbContextOptionsBuilder options)
-		=> options.UseSqlite($"Data Source={DbPath}");
+		=> options.UseSqlite("Data Source=db.sqlite");
 	}
 }

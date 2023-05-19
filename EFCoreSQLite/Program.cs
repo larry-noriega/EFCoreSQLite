@@ -1,2 +1,10 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿namespace EFCoreSQLite
+{
+	class Program
+	{
+		static void Main()
+		{
+			using var db = new BloggingContext();
+		}
+	}
+}
