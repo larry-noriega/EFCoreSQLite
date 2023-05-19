@@ -18,5 +18,8 @@ namespace EFCoreSQLite
 			var path = Environment.GetFolderPath(folder);
 			DbPath = Path.Join(path, "blogginh.db");
         }
-    }
+
+		protected override void OnConfiguring(DbContextOptionsBuilder options)
+		=> options.UseSqlite($"Data Source={DbPath}");
+	}
 }
