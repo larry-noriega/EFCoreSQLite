@@ -355,9 +355,12 @@ healthchecksdb
 
 # Backup folder for Package Reference Convert tool in Visual Studio 2017
 MigrationBackup/
+Migrations/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/EFCoreSQLite/db.sqlite-wal
+/EFCoreSQLite/db.sqlite-shm
