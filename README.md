@@ -12,6 +12,8 @@ A .NET Core console app that performs data access against a SQLite database usin
 
 Before execute with `F5`, add a breakpoint where is indicated.
 
-![image](https://github.com/larry-noriega/EFCoreSQLite/assets/4468105/429aeeac-8ae6-4fa8-9210-24428351fa03)
+![image](https://github.com/larry-noriega/EFCoreSQLite/assets/4468105/3250a1c4-5d91-4f5a-9919-57a8723d7511)
 
 **That's it!**
+
+<sub>Further information: [Getting Started with EF Core](https://learn.microsoft.com/en-us/ef/core/get-started/overview/first-app) - Microsoft Docs.</sub>
