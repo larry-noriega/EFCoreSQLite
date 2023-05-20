@@ -7,94 +7,91 @@ namespace EFCoreSQLite
 {
 	class Program
 	{
+		private static Blog? _blog;
+		private static readonly BloggingContext _db = new();
+
 		static void Main()
 		{
-			using var db = new BloggingContext();
-
-			var jsonOptions = new JsonSerializerOptions {
+			JsonSerializerOptions jsonOptions = new()
+			{
 				WriteIndented = true,
 				ReferenceHandler = ReferenceHandler.IgnoreCycles
 			};
 
-			string filePath = $"{db.DbPath}";
+			string filePath = $"{_db.DbPath}";
 
+			//Database file path
 			Console.WriteLine($"Database path: {filePath}.");
+			Console.WriteLine($"Opening database...");
+
 
 			//TODO: Add Breakpoint here
 			//Open Database
 			Process openDatabase = new()
 			{
-				StartInfo = new ProcessStartInfo(@filePath)
+				StartInfo = new(@filePath)
 				{
 					UseShellExecute = true
 				}
 			};
-
 			openDatabase.Start();
 			
-			Blog? blog = new() { Url = "http://blogs.msdn.com/adonet" };
+			_blog = new() { Url = "http://blogs.msdn.com/adonet" };
 
 
 			//TODO: Add Breakpoint here
 			// Create
 			Console.WriteLine("Inserting a new blog");
 
-			db.Add(blog);
-			db.SaveChanges();
+			_db.Add(_blog);
+			_db.SaveChanges();		
 
-			string jsonString = JsonSerializer.Serialize(blog, jsonOptions);			
-
-			Console.WriteLine("\r\n" + jsonString + "\r\n");
+			Console.WriteLine("\r\n" + JsonSerializer.Serialize(_blog, jsonOptions) + "\r\n");
 
 
 			//TODO: Add Breakpoint here
 			// Read
 			Console.WriteLine("Querying for a blog");
 
-			blog = db.Blogs
+			_blog = _db.Blogs
 				.OrderBy(b => b.BlogId)
 				.First();
 
-			jsonString = JsonSerializer.Serialize(blog, jsonOptions);
-
-			Console.WriteLine("\r\n" + jsonString + "\r\n");
+			Console.WriteLine("\r\n" +  JsonSerializer.Serialize(_blog, jsonOptions) + "\r\n");
 
 
 			//TODO: Add Breakpoint here
 			//Update
 			Console.WriteLine("Updating the blog and adding a post");
-			blog.Url = "https://devblogs.microsoft.com/dotnet";
-			blog.Posts.Add(
+			_blog.Url = "https://devblogs.microsoft.com/dotnet";
+			_blog.Posts.Add(
 				new Post { Title = "Hello World", Content = "I wrote an app using EF Core!" });
 
-			db.SaveChanges();
+			_db.SaveChanges();
 
-			blog = db.Blogs
-				.Where(b => b.BlogId == blog.BlogId)
+			_blog = _db.Blogs
+				.Where(b => b.BlogId == _blog.BlogId)
 				.FirstOrDefault();
 
-			jsonString = JsonSerializer.Serialize(blog, jsonOptions);
-
-			Console.WriteLine("\r\n" + jsonString + "\r\n");
+			Console.WriteLine("\r\n" + JsonSerializer.Serialize(_blog, jsonOptions) + "\r\n");
 
 
 			//TODO: Add Breakpoint here
 			// Delete
-			int? blogID = blog.BlogId;
+			int? blogID = _blog?.BlogId;
 
 			Console.WriteLine("Delete the blog");
-			db.Remove(blog);
-			db.SaveChanges();
 
-			blog = db.Blogs
+			_db.Remove(_blog);
+			_db.SaveChanges();
+
+			_blog = _db.Blogs
 				.Where(b => b.BlogId == blogID)
 				.FirstOrDefault();
 
-			jsonString = JsonSerializer.Serialize(blog, jsonOptions);
-
 			Console.WriteLine("\r\n" + $"Checking existence for a blogId: {blogID}");			
 
-			Console.WriteLine("\r\n" + blog is null ? "Blog was found: " : "Blog was not found: " + jsonString + "\r\n" );
+			Console.WriteLine("\r\n" + _blog is null ? "Blog was found: " : "Blog was not found: " + JsonSerializer.Serialize(_blog, jsonOptions) + "\r\n" );
 		}
 	}
 }
